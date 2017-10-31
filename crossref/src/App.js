@@ -48,8 +48,10 @@ class App extends Component {
               <Collapsible trigger={item.title} key={index} lazyRender={true}>
                                              {(item.author || []).map((auth, index) =>
                                                       <Collapsible trigger={auth.given + " " + auth.family}>
+                                                        <div>
                                                           <button key={index} onClick={ (e) => this.handleClick(e, (auth.given + "+" + auth.family).toLowerCase())}>Show author articles</button>
                                                           {this.state.titleList}
+                                                        </div>
                                                       </Collapsible>)}
                             </Collapsible>
            </div>
@@ -66,7 +68,10 @@ class App extends Component {
     }
 
     search(query = ""){
-      var url =`https://api.crossref.org/works?query.title=${query}&rows=5&mailto=workaintfun@yahoo.com`;
+      if(query == ""){
+        return null
+      }
+      var url = `https://api.crossref.org/works?query=${query}&sort=relevance&order=desc&rows=5&mailto=workaintfun@yahoo.com`;
       return fetch(url).then((response) => response.json()).then((response) => {
         this.setState({
           data: response,
